@@ -40,6 +40,12 @@ const ComingSoonTitle = styled.Text`
   margin-left: 30px;
   margin-bottom: 10px;
 `;
+const VSeperator = styled.View`
+  width: 20px;
+`;
+const HSeperator = styled.View`
+  height: 20px;
+`;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -92,6 +98,23 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
     getData();
   }, []);
 
+  const renderVMedia = ({ item }) => (
+    <VMedia
+      poster_path={item.poster_path}
+      original_title={item.original_title}
+      vote_average={item.vote_average}
+    ></VMedia>
+  );
+  const renderHMedia = ({ item }) => (
+    <HMedia
+      poster_path={item.poster_path}
+      original_title={item.original_title}
+      release_date={item.release_date}
+      overview={item.overview}
+    ></HMedia>
+  );
+  const movieKeyExtractor = (item) => item.id + "";
+
   return loading ? (
     <Loader>
       <ActivityIndicator />
@@ -132,32 +155,19 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
               contentContainerStyle={{ paddingHorizontal: 20 }}
               horizontal
               showsHorizontalScrollIndicator={false}
-              ItemSeparatorComponent={() => <View style={{ width: 20 }}></View>}
+              ItemSeparatorComponent={VSeperator}
               data={trending}
-              keyExtractor={(item) => item.id + ""}
-              renderItem={({ item }) => (
-                <VMedia
-                  poster_path={item.poster_path}
-                  original_title={item.original_title}
-                  vote_average={item.vote_average}
-                ></VMedia>
-              )}
+              keyExtractor={movieKeyExtractor}
+              renderItem={renderVMedia}
             ></TrendingScroll>
           </ListContainer>
           <ComingSoonTitle>Coming Soon</ComingSoonTitle>
         </>
       }
-      ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
+      ItemSeparatorComponent={HSeperator}
       data={upComing}
-      keyExtractor={(item) => item.id + ""}
-      renderItem={({ item }) => (
-        <HMedia
-          poster_path={item.poster_path}
-          original_title={item.original_title}
-          release_date={item.release_date}
-          overview={item.overview}
-        ></HMedia>
-      )}
+      keyExtractor={movieKeyExtractor}
+      renderItem={renderHMedia}
     ></FlatList>
   );
 };
