@@ -13,8 +13,8 @@ import Poster from "../components/Poster";
 import Slide from "../components/Slide";
 import VMedia from "../components/VMedia";
 import HMedia from "../components/HMedia";
-
-const API_KEY = "10923b261ba94d897ac6b81148314a3f";
+import { useQuery, useQueryErrorResetBoundary } from "react-query";
+import { moviesApi } from "../api";
 
 const Loader = styled.View`
   flex: 1;
@@ -50,53 +50,22 @@ const HSeperator = styled.View`
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
-  const [loading, setLoading] = useState(true);
-  const [nowPlaying, setNowPlaying] = useState([]);
-  const [upComing, setUpComing] = useState([]);
-  const [trending, setTrending] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {};
+  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
+    "nowPlaying",
+    moviesApi.nowPlaying
+  );
+  const { isLoading: trendingLoading, data: trendingData } = useQuery(
+    "trending",
+    moviesApi.trending
+  );
+  const { isLoading: upComingLoading, data: upComingData } = useQuery(
+    "upComing",
+    moviesApi.upComing
+  );
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await getData();
-    setRefreshing(false);
-  };
-
-  const getTrending = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}&language=en-US&page=1`
-      )
-    ).json();
-    setTrending(results);
-  };
-
-  const getUpcoming = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=1`
-      )
-    ).json();
-    setUpComing(results);
-  };
-
-  const getNowPlaying = async () => {
-    const { results } = await (
-      await fetch(
-        `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=en-US&page=1`
-      )
-    ).json();
-    setNowPlaying(results);
-  };
-
-  const getData = async () => {
-    await Promise.all([getTrending(), getUpcoming(), getNowPlaying()]);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const loading = nowPlayingLoading || upComingLoading || trendingLoading;
 
   const renderVMedia = ({ item }) => (
     <VMedia
@@ -138,7 +107,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
               marginBottom: 30,
             }}
           >
-            {nowPlaying.map((movie) => (
+            {nowPlayingData.results.map((movie) => (
               <Slide
                 key={movie.id}
                 backdrop_path={movie.backdrop_path}
@@ -156,7 +125,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
               horizontal
               showsHorizontalScrollIndicator={false}
               ItemSeparatorComponent={VSeperator}
-              data={trending}
+              data={trendingData.results}
               keyExtractor={movieKeyExtractor}
               renderItem={renderVMedia}
             ></TrendingScroll>
@@ -165,7 +134,7 @@ const Movies: React.FC<NativeStackScreenProps<any, "Movies">> = () => {
         </>
       }
       ItemSeparatorComponent={HSeperator}
-      data={upComing}
+      data={upComingData.results}
       keyExtractor={movieKeyExtractor}
       renderItem={renderHMedia}
     ></FlatList>
