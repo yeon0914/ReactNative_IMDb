@@ -1,10 +1,17 @@
 import React from "react";
 import styled from "styled-components/native";
-import { StyleSheet, useColorScheme } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  useColorScheme,
+} from "react-native";
 import { BlurView } from "expo-blur";
 import { makeImgPath } from "../utils";
 import Poster from "./Poster";
 import Votes from "./Votes";
+import { useNavigation } from "@react-navigation/native";
+import Detail from "../screens/Detail";
 
 const View = styled.View`
   flex: 1;
@@ -51,28 +58,33 @@ const Slide: React.FC<SlideProps> = ({
   overview,
 }) => {
   const isDark = useColorScheme() === "dark";
-
+  const navigation = useNavigation();
+  const goToDetail = () => {
+    navigation.navigate("Stack", { screen: Detail });
+  };
   return (
-    <View>
-      <BgImg
-        style={StyleSheet.absoluteFill}
-        source={{ uri: makeImgPath(backdrop_path) }}
-      />
-      {/* <BlurView
+    <TouchableWithoutFeedback onPress={goToDetail}>
+      <View>
+        <BgImg
+          style={StyleSheet.absoluteFill}
+          source={{ uri: makeImgPath(backdrop_path) }}
+        />
+        {/* <BlurView
               tint={isDark ? "dark" : "light"}
               intensity={85}
               style={StyleSheet.absoluteFill}
             > */}
-      <Wrapper>
-        <Poster path={poster_path} />
-        <Column>
-          <Title isDark={isDark}>{original_title}</Title>
-          <Votes vote_average={vote_average}></Votes>
-          <Overview isDark={isDark}>{overview.slice(0, 100)}...</Overview>
-        </Column>
-      </Wrapper>
-      {/* </BlurView> */}
-    </View>
+        <Wrapper>
+          <Poster path={poster_path} />
+          <Column>
+            <Title isDark={isDark}>{original_title}</Title>
+            <Votes vote_average={vote_average}></Votes>
+            <Overview isDark={isDark}>{overview.slice(0, 100)}...</Overview>
+          </Column>
+        </Wrapper>
+        {/* </BlurView> */}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
