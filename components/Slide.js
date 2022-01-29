@@ -2,11 +2,10 @@ import React from "react";
 import styled from "styled-components/native";
 import {
   StyleSheet,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   useColorScheme,
 } from "react-native";
-import { BlurView } from "expo-blur";
+// import { BlurView } from "expo-blur";
 import { makeImgPath } from "../utils";
 import Poster from "./Poster";
 import Votes from "./Votes";
@@ -19,7 +18,7 @@ const View = styled.View`
 
 const BgImg = styled.Image``;
 
-const Title = styled.Text<{ isDark: boolean }>`
+const Title = styled.Text`
   font-size: 16px;
   font-weight: 600;
   color: ${(props) => (props.isDark ? "white" : props.theme.textColor)};
@@ -36,26 +35,19 @@ const Wrapper = styled.View`
 const Column = styled.View`
   width: 60%;
 `;
-const Overview = styled.Text<{ isDark: boolean }>`
+const Overview = styled.Text`
   margin-top: 10px;
   color: ${(props) =>
     props.isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.8)"};
 `;
 
-interface SlideProps {
-  backdrop_path: string;
-  poster_path: string;
-  original_title: string;
-  vote_average: number;
-  overview: string;
-}
-
-const Slide: React.FC<SlideProps> = ({
+const Slide = ({
   backdrop_path,
   poster_path,
   original_title,
   vote_average,
   overview,
+  full_data,
 }) => {
   const isDark = useColorScheme() === "dark";
   const navigation = useNavigation();

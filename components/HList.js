@@ -17,12 +17,7 @@ export const HListSeperator = styled.View`
   width: 20px;
 `;
 
-interface HListProps {
-  title: string;
-  data: any[];
-}
-
-const HList: React.FC<HListProps> = ({ title, data }) => (
+const HList = ({ title, data }) => (
   <ListContainer>
     <ListTitle>{title}</ListTitle>
     <FlatList

@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { TouchableOpacity, TouchableOpacityBase } from "react-native";
+import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
-import Detail from "../screens/Detail";
 import Poster from "./Poster";
 import Votes from "./Votes";
 
@@ -16,17 +15,7 @@ const Title = styled.Text`
   margin-bottom: 5px;
 `;
 
-interface VMediaProps {
-  poster_path: string;
-  original_title: string;
-  vote_average: number;
-}
-
-const VMedia: React.FC<VMediaProps> = ({
-  poster_path,
-  original_title,
-  vote_average,
-}) => {
+const VMedia = ({ poster_path, original_title, vote_average }) => {
   const navigation = useNavigation();
   const goToDetail = () => {
     navigation.navigate("Stack", {

@@ -30,15 +30,7 @@ const Release = styled.Text`
   margin-vertical: 10px;
 `;
 
-interface HMediaProps {
-  poster_path: string;
-  original_title: string;
-  release_date?: string;
-  vote_average?: number;
-  overview: string;
-}
-
-const HMedia: React.FC<HMediaProps> = ({
+const HMedia = ({
   poster_path,
   original_title,
   release_date,

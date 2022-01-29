@@ -32,7 +32,7 @@ const Search = () => {
     enabled: false,
   });
 
-  const onChangeText = (text: string) => setQuery(text);
+  const onChangeText = (text) => setQuery(text);
   const onSubmit = () => {
     if (query === "") {
       return;

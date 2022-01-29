@@ -8,11 +8,8 @@ const Image = styled.Image`
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.5);
 `;
-interface PosterProps {
-  path: string;
-}
 
-const Poster: React.FC<PosterProps> = ({ path }) => (
+const Poster = ({ path }) => (
   <Image source={{ uri: makeImgPath(path) }}></Image>
 );
 
