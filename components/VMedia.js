@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 import Poster from "./Poster";
 import Votes from "./Votes";
 
-const Movie = styled.View`
+const Container = styled.View`
   align-items: center;
 `;
 const Title = styled.Text`
@@ -15,24 +15,25 @@ const Title = styled.Text`
   margin-bottom: 5px;
 `;
 
-const VMedia = ({ poster_path, original_title, vote_average }) => {
+const VMedia = ({ poster_path, original_title, vote_average, full_data }) => {
+  console.log(full_data);
   const navigation = useNavigation();
   const goToDetail = () => {
     navigation.navigate("Stack", {
       screen: "Detail",
-      params: { original_title },
+      params: { ...full_data },
     });
   };
   return (
     <TouchableOpacity onPress={goToDetail}>
-      <Movie>
+      <Container>
         <Poster path={poster_path}></Poster>
         <Title>
           {original_title.slice(0, 11)}
           {original_title.length > 13 ? "..." : null}
         </Title>
         <Votes vote_average={vote_average}></Votes>
-      </Movie>
+      </Container>
     </TouchableOpacity>
   );
 };

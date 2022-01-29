@@ -36,12 +36,13 @@ const HMedia = ({
   release_date,
   vote_average,
   overview,
+  full_data,
 }) => {
   const navigation = useNavigation();
   const goToDetail = () => {
     navigation.navigate("Stack", {
       screen: "Detail",
-      params: { original_title },
+      params: { ...full_data },
     });
   };
 

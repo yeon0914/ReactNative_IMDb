@@ -87,7 +87,7 @@ const Movies = () => {
                     original_title={movie.original_title}
                     vote_average={movie.vote_average}
                     overview={movie.overview}
-                    full-data={movie}
+                    full_data={movie}
                   ></Slide>
                 ))
               : null}

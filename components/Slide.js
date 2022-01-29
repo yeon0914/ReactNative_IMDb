@@ -54,7 +54,7 @@ const Slide = ({
   const goToDetail = () => {
     navigation.navigate("Stack", {
       screen: "Detail",
-      params: { original_title },
+      params: { ...full_data },
     });
   };
   return (
