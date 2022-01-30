@@ -1,6 +1,13 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect } from "react";
-import { StyleSheet, Dimensions, Linking } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+  Linking,
+  TouchableOpacity,
+  Share,
+  Platform,
+} from "react-native";
 import { useQuery } from "react-query";
 import styled from "styled-components/native";
 import { moviesApi, tvApi } from "../api";
@@ -48,7 +55,34 @@ const BtnText = styled.Text`
 `;
 
 const Detail = ({ navigation: { setOptions }, route: { params } }) => {
-  console.log(params);
+  const ShareButton = () => (
+    <TouchableOpacity onPress={shareMedia}>
+      <Ionicons name="share-outline" color="white" size={24}></Ionicons>
+    </TouchableOpacity>
+  );
+  const shareMedia = async () => {
+    const isAndroid = Platform.OS === "android";
+    const homepage = isMovie
+      ? `https://www.imdb.com/title/${data.imdb_id}/`
+      : data.homepage;
+    if (isAndroid) {
+      await Share.share({
+        message: `${params.overview}\nCheck it out : ${homepage}`,
+        title:
+          "original_title" in params
+            ? params.original_title
+            : params.original_name,
+      });
+    } else {
+      await Share.share({
+        url: homepage,
+        title:
+          "original_title" in params
+            ? params.original_title
+            : params.original_name,
+      });
+    }
+  };
   const isMovie = "original_title" in params;
   const { isLoading, data } = useQuery(
     [isMovie ? "movies" : "tv", params.id],
@@ -59,13 +93,18 @@ const Detail = ({ navigation: { setOptions }, route: { params } }) => {
     await Linking.openURL(baseUrl);
     // await WebBrowser.openBrowserAsync(baseUrl);
   };
-  console.log(data);
 
   useEffect(() => {
     setOptions({
       title: "original_title" in params ? "Movie" : "TV Show",
     });
   }, []);
+
+  useEffect(() => {
+    setOptions({
+      headerRight: () => <ShareButton></ShareButton>,
+    });
+  }, [data]);
 
   return (
     <Container>
