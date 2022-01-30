@@ -16,7 +16,6 @@ const Title = styled.Text`
 `;
 
 const VMedia = ({ poster_path, original_title, vote_average, full_data }) => {
-  console.log(full_data);
   const navigation = useNavigation();
   const goToDetail = () => {
     navigation.navigate("Stack", {
